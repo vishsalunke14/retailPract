@@ -8,6 +8,6 @@ public class TestController {
 
     @GetMapping("/api/test")
     public String test() {
-        return "Retail Billing Backend is Running 🚀";
+        return "Retail Billing Backend isss Running 🚀";
     }
 }
