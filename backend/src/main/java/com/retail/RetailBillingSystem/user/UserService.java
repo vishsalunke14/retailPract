@@ -2,9 +2,11 @@ package com.retail.retailbillingsystem.user;
 
 import com.retail.retailbillingsystem.user.dto.RegisterRequest;
 import com.retail.retailbillingsystem.user.dto.LoginRequest;
+import com.retail.retailbillingsystem.user.dto.LoginResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import com.retail.retailbillingsystem.security.JwtUtil;
 
 @Service
 @RequiredArgsConstructor
@@ -12,6 +14,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;  // ✅ ADD THIS LINE
+    private final JwtUtil jwtUtil;
 
     public String registerUser(RegisterRequest request) {
 
@@ -40,24 +43,20 @@ public class UserService {
         return "User registered successfully";
     }
 
-    public String loginUser(LoginRequest request) {
+    public LoginResponse loginUser(LoginRequest request) {
 
         User user = userRepository.findByUsername(request.getUsername())
-                .orElse(null);
+                .orElseThrow(() -> new RuntimeException("User not found"));
 
-        if (user == null) {
-            return "User not found";
-        }
-
-        boolean passwordMatch = passwordEncoder.matches(
-                request.getPassword(),
-                user.getPassword()
-        );
+        boolean passwordMatch =
+                passwordEncoder.matches(request.getPassword(), user.getPassword());
 
         if (!passwordMatch) {
-            return "Invalid password";
+            throw new RuntimeException("Invalid password");
         }
 
-        return "Login successful";
+        String token = jwtUtil.generateToken(user.getUsername());
+
+        return new LoginResponse(token);
     }
 }
