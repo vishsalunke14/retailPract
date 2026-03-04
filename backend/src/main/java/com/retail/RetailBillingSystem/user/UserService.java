@@ -32,7 +32,7 @@ public class UserService {
                 .password(passwordEncoder.encode(request.getPassword())) // 🔐 Encrypt here
                 .email(request.getEmail())
                 .phoneNumber(request.getPhoneNumber())
-                .role(request.getRole())
+                .role("MERCHANT")   // automatically assigned
                 .build();
 
         userRepository.save(user);
