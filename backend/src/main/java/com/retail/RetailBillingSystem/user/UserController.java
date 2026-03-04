@@ -1,6 +1,7 @@
 package com.retail.retailbillingsystem.user;
 
 import com.retail.retailbillingsystem.user.dto.RegisterRequest;
+import com.retail.retailbillingsystem.user.dto.LoginRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,5 +15,11 @@ public class UserController {
     @PostMapping("/register")
     public String register(@RequestBody RegisterRequest request) {
         return userService.registerUser(request);
+    }
+
+
+    @PostMapping("/login")
+    public String login(@RequestBody LoginRequest request) {
+        return userService.loginUser(request);
     }
 }

@@ -1,6 +1,7 @@
 package com.retail.retailbillingsystem.user;
 
 import com.retail.retailbillingsystem.user.dto.RegisterRequest;
+import com.retail.retailbillingsystem.user.dto.LoginRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -37,5 +38,26 @@ public class UserService {
         userRepository.save(user);
 
         return "User registered successfully";
+    }
+
+    public String loginUser(LoginRequest request) {
+
+        User user = userRepository.findByUsername(request.getUsername())
+                .orElse(null);
+
+        if (user == null) {
+            return "User not found";
+        }
+
+        boolean passwordMatch = passwordEncoder.matches(
+                request.getPassword(),
+                user.getPassword()
+        );
+
+        if (!passwordMatch) {
+            return "Invalid password";
+        }
+
+        return "Login successful";
     }
 }
