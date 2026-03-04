@@ -33,7 +33,7 @@ public class User {
     @Column(nullable = false)
     private String role;
 
-    @Column(nullable = false)
+    @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
     // ✅ ADD THIS METHOD INSIDE THE CLASS
